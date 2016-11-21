@@ -6,7 +6,8 @@ ARG URL=http://dynamodb-local.s3-website-us-west-2.amazonaws.com
 
 RUN mkdir -p /data
 WORKDIR /data
-RUN curl -L $URL/dynamodb_local_latest | /bin/tar xz
+ADD run_dynamodb.sh .
+RUN chmod +x /data/run_dynamodb.sh && \
+    curl -L $URL/dynamodb_local_latest | /bin/tar xz
 
-ENTRYPOINT ["java"]
-CMD ["-Djava.library.path=./DynamoDBLocal_lib", "-jar", "DynamoDBLocal.jar"]
+ENTRYPOINT ["/data/run_dynamodb.sh"]
